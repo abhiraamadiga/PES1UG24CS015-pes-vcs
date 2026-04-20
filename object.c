@@ -321,13 +321,14 @@ int object_read(const ObjectID *id, ObjectType *type_out, void **data_out, size_
         return -1;
     }
 
-    void *data = malloc(data_len);
-    if (!data && data_len != 0) {
+    unsigned char *data = malloc(data_len + 1);
+    if (!data) {
         free(header);
         free(buf);
         return -1;
     }
     if (data_len > 0) memcpy(data, nul + 1, data_len);
+    data[data_len] = '\0';
 
     *type_out = parsed_type;
     *data_out = data;
